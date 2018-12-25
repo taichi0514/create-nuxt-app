@@ -36,7 +36,6 @@ module.exports = {
   plugins: [
     '@/plugins/element-ui'
   ],
-
   /*
   ** Nuxt.js modules
   */
@@ -50,6 +49,9 @@ module.exports = {
   axios: {
     // See https://github.com/nuxt-community/axios-module#options
     baseURL: 'https://https://nuxt-blog-service-9a277.firebaseio.com'
+  },
+  router: {
+    middleware: ['auth-cookie']
   },
 
   /*

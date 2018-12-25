@@ -15,7 +15,7 @@ export const mutations = {
   }
 }
 
-export const action = {
+export const actions = {
 
   async login({commit}, {id}) {
     const user = await this.$axios.$get(`/user/${id}.json`)

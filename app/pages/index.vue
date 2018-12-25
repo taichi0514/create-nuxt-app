@@ -6,14 +6,14 @@
       </div>
       <from>
         <div class="from-content">
-          <sapn>ユーザーID</sapn>
+          <span>ユーザーID</span>
           <el-input placeholder="" v-model="fromData.id"></el-input>
         </div>
         <div class="from-content">
           <el-checkbox v-model="isCreateMode">アカウント作成</el-checkbox>
         </div>
         <div class="text-right">
-          <el-button type="primary">{{buttonText}}</el-button>
+          <el-button type="primary" @click="handleClickSubmit">{{buttonText}}</el-button>
         </div>
       </from>
     </el-card>
@@ -22,6 +22,7 @@
 
 <script>
   import {mapGetters, mapActions} from 'vuex'
+  import Cookies from 'universal-cookie'
 
 export default {
   asyncData({redirect, store}) {
@@ -38,24 +39,27 @@ export default {
   computed: {
     buttonText() {
       return this.isCreateMode ? '新規登録' : 'ログイン'
-    }
+    },
+    ...mapGetters(['user'])
   },
   methods: {
     async handleClickSubmit() {
+      const cookies = new Cookies()
       if (this.isCreateMode) {
         try {
           await this.register({...this.fromData})
           this.$notify({
             type: 'succes',
-            titile: 'アカウント作成完了',
+            title: 'アカウント作成完了',
             message: `${this.formData.id}として登録しました`,
             position: 'bottom-right',
             duration: 1000
           })
+          cookies.set('user', JSON.stringify(this.user))
           this.$router.push('/posts/')
         } catch (e) {
           this.$notify.error({
-            titile: 'アカウント作成完了',
+            title: 'アカウント作成完了',
             message: "既に登録されているか不正IDです。",
             position: 'bottom-right',
             duration: 1000
@@ -66,16 +70,17 @@ export default {
           await this.login({...this.fromData})
           this.$notify({
             type: 'succes',
-            titile: 'ログイン成功',
+            title: 'ログイン成功',
             message: `${this.formData.id}としてログインしました`,
             position: 'bottom-right',
             duration: 1000
           })
+          cookies.set('user', JSON.stringify(this.user))
           this.$router.push('/posts/')
         } catch (e) {
           this.$router.error(
             {
-              titile: 'ログイン失敗',
+              title: 'ログイン失敗',
               message: "不正ユーザーIDです。",
               position: 'bottom-right',
               duration: 1000
