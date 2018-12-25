@@ -21,8 +21,13 @@
 </template>
 
 <script>
+  import {mapGetters, mapActions} from 'vuex'
+
 export default {
-  asyncData() {
+  asyncData({redirect, store}) {
+    if (store.getters['user']) {
+      redirect('/posts/')
+    }
     return {
       isCreateMode: false,
       fromData: {
@@ -34,12 +39,58 @@ export default {
     buttonText() {
       return this.isCreateMode ? '新規登録' : 'ログイン'
     }
+  },
+  methods: {
+    async handleClickSubmit() {
+      if (this.isCreateMode) {
+        try {
+          await this.register({...this.fromData})
+          this.$notify({
+            type: 'succes',
+            titile: 'アカウント作成完了',
+            message: `${this.formData.id}として登録しました`,
+            position: 'bottom-right',
+            duration: 1000
+          })
+          this.$router.push('/posts/')
+        } catch (e) {
+          this.$notify.error({
+            titile: 'アカウント作成完了',
+            message: "既に登録されているか不正IDです。",
+            position: 'bottom-right',
+            duration: 1000
+          })
+        }
+      } else {
+        try {
+          await this.login({...this.fromData})
+          this.$notify({
+            type: 'succes',
+            titile: 'ログイン成功',
+            message: `${this.formData.id}としてログインしました`,
+            position: 'bottom-right',
+            duration: 1000
+          })
+          this.$router.push('/posts/')
+        } catch (e) {
+          this.$router.error(
+            {
+              titile: 'ログイン失敗',
+              message: "不正ユーザーIDです。",
+              position: 'bottom-right',
+              duration: 1000
+            }
+          )
+        }
+      }
+    },
+    ...mapActions(['login', 'register'])
   }
 }
 </script>
 
 <style scoped>
   .from-content {
-    margin: 16px 0;
+    margin: 0 16px;
   }
 </style>
