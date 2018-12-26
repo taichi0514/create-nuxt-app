@@ -3,6 +3,11 @@ const pkg = require('./package')
 module.exports = {
   mode: 'universal',
   srcDir: 'app',
+  router: {
+    middleware: [
+      'auth-cookie'
+    ]
+  },
   /*
   ** Headers of the page
   */
@@ -48,12 +53,8 @@ module.exports = {
   */
   axios: {
     // See https://github.com/nuxt-community/axios-module#options
-    baseURL: 'https://https://nuxt-blog-service-9a277.firebaseio.com'
+    baseURL: 'https://nuxt-blog-service-9a277.firebaseio.com'
   },
-  router: {
-    middleware: ['auth-cookie']
-  },
-
   /*
   ** Build configuration
   */
