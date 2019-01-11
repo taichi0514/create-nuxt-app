@@ -18,7 +18,8 @@
     "lodash.clonedeep": "^4.5.0",
     "moment": "^2.23.0",
     "nuxt": "^2.0.0",
-    "universal-cookie": "^3.0.7"
+    "universal-cookie": "^3.0.7",
+    "vuex": "^3.0.1"
   },
   "devDependencies": {
     "jest": "^23.6.0",
